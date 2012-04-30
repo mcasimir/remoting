@@ -1,0 +1,6 @@
+remote:
+  login: user@server
+  dest: /var/ror/myapp
+  repo: git@gitserver:myapp
+  ruby: 1.9.3
+  gemset: myapp
