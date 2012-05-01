@@ -7,7 +7,6 @@ module Remote
     attr_reader :login
     def initialize(login)
       @login = login
-      super
     end
     
     #overrides
@@ -25,9 +24,11 @@ module Remote
     
     def remote(*cmds)
       res = ""
-      runline = command_list(cmds).join(";")
+      runline = cmds.join(";")
 
+      puts "[REMOTE] Connecting to #{login} ..."
       puts "[REMOTE] Executing '#{runline}' ..."
+
       ssh(login) do |remote|
         puts res = remote.exec!(runline)
       end
