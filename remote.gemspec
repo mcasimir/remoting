@@ -24,18 +24,12 @@ Gem::Specification.new do |s|
     "Rakefile",
     "VERSION",
     "example.yml",
-    "lib/generators/install/install_generator.rb",
-    "lib/generators/strategy/strategy_generator.rb",
     "lib/remote.rb",
     "lib/remote/commander.rb",
     "lib/remote/config.rb",
     "lib/remote/engine.rb",
     "lib/remote/local_commander.rb",
     "lib/remote/remote_commander.rb",
-    "lib/remote/strategies/common_commands.rb",
-    "lib/remote/strategies/git_passenger_strategy.rb",
-    "lib/remote/strategy.rb",
-    "lib/tasks/remote.rake",
     "remote.gemspec"
   ]
   s.homepage = "http://github.com/mcasimir/remote"
@@ -48,15 +42,18 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<rails>, ["~> 3.0"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.8.3"])
+      s.add_development_dependency(%q<net-ssh>, [">= 0"])
+      s.add_development_dependency(%q<rails>, ["~> 3.0"])
     else
-      s.add_dependency(%q<rails>, ["~> 3.0"])
       s.add_dependency(%q<jeweler>, ["~> 1.8.3"])
+      s.add_dependency(%q<net-ssh>, [">= 0"])
+      s.add_dependency(%q<rails>, ["~> 3.0"])
     end
   else
-    s.add_dependency(%q<rails>, ["~> 3.0"])
     s.add_dependency(%q<jeweler>, ["~> 1.8.3"])
+    s.add_dependency(%q<net-ssh>, [">= 0"])
+    s.add_dependency(%q<rails>, ["~> 3.0"])
   end
 end
 

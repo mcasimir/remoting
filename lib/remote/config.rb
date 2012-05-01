@@ -10,4 +10,9 @@ module Remote
     end
 
   end
+  
+  def config
+    @config ||= Config.new
+  end
+  module_function :config
 end

@@ -1,3 +1,4 @@
+require 'remote/commander'
 require 'net/ssh'
 
 module Remote
@@ -10,8 +11,8 @@ module Remote
     end
     
     #overrides
-    def exec(*cmds)
-      remote(*cmds)
+    def do_exec(cmds)
+      remote(cmds)
     end
     
     def ssh(user_at_host) # eg ssh "usr@remoteserver" do |conn| ...
