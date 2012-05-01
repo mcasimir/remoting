@@ -110,7 +110,7 @@ namespace :remote do
   task :log, [:lines, :filename] => [:environment] do |t, args|
           filename = args[:filename] || "production"
           filename = "#{filename}.log" unless filename =~ /\.[a-z]+$/
-          lines    = args[:lines] || "50"
+          lines    = args[:lines] || "100"
 
           remote("cd #{config[:dest]}",
                 "tail -#{lines} log/#{filename}")
@@ -121,61 +121,5 @@ namespace :remote do
 
 end
 
-#
-# -----------------------------------------------------------------------------------------------------------------------
-#
-
-#
-# Functions
-#
-def ssh(user_at_host) # eg ssh "usr@remoteserver" do |conn| ...
-  require 'rubygems'
-  require 'net/ssh'
-
-  user, host = user_at_host.split("@")
-
-  Net::SSH.start(host, user) do |ssh|
-    yield(ssh)
-  end
-end
 
 
-def local(*cmds)
-  runline = command_list(cmds).map{|c| "#{c} 2>&1"}.join(";")
-
-  puts "[LOCAL]  Executing '#{runline}' ..."
-  puts `#{runline}`
-end
-
-def remote(*cmds)
-  res = ""
-  runline = command_list(cmds).join(";")
-
-  puts "[REMOTE] Executing '#{runline}' ..."
-  ssh(config[:login]) do |remote|
-    puts res = remote.exec!(runline)
-  end
-
-  res.split("\n").last if res # latest retval
-end
-
-def use_ruby(ver)
-  "rvm use #{ver}"
-end
-
-def load_rvm
-  "[[ -s $HOME/.rvm/scripts/rvm ]] && source $HOME/.rvm/scripts/rvm"
-end
-
-def config
-  @config ||= YAML.load_file(Rails.root.join('config', 'remote.yml'))
-end
-
-def command_list(cmds)
-  cmds.flatten.map! do |c|
-    c.split(/[\r\n]/).map{|l|
-      line = l.strip
-      line.empty? ? nil : line
-    }
-  end.flatten.compact
-end
