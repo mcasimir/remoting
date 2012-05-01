@@ -35,7 +35,8 @@ Gem::Specification.new do |s|
     "lib/remote/strategies/common_commands.rb",
     "lib/remote/strategies/git_passenger_strategy.rb",
     "lib/remote/strategy.rb",
-    "lib/tasks/remote.rake"
+    "lib/tasks/remote.rake",
+    "remote.gemspec"
   ]
   s.homepage = "http://github.com/mcasimir/remote"
   s.licenses = ["MIT"]
