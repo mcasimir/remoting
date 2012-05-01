@@ -16,8 +16,8 @@ Jeweler::Tasks.new do |gem|
   gem.name = "remote"
   gem.homepage = "http://github.com/mcasimir/remote"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{Deploy applications with Rake task}
+  gem.description = %Q{Remote is a lightweight alternative to Capistrano that is suitable for small projects. It provides some common Deploying Strategies (eg. git + passenger + rvm) and a little framework to run remote commands over SSH with a DSL to define remote scripts.}
   gem.email = "maurizio.cas@gmail.com"
   gem.authors = ["mcasimir"]
   # dependencies defined in Gemfile
