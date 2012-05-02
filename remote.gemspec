@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["mcasimir"]
-  s.date = "2012-05-01"
+  s.date = "2012-05-02"
   s.description = "Remote is a lightweight alternative to Capistrano that is suitable for small projects. It provides some common Deploying Strategies (eg. git + passenger + rvm) and a little framework to run remote commands over SSH with a DSL to define remote scripts."
   s.email = "maurizio.cas@gmail.com"
   s.extra_rdoc_files = [
@@ -25,16 +25,15 @@ Gem::Specification.new do |s|
     "VERSION",
     "example.yml",
     "lib/generators/remote/install_generator.rb",
-    "lib/generators/remote/strategy_generator.rb",
     "lib/remote.rb",
     "lib/remote/commander.rb",
     "lib/remote/config.rb",
     "lib/remote/dsl/script_builder.rb",
     "lib/remote/dsl/string.rb",
-    "lib/remote/dsl/symbol.rb",
     "lib/remote/engine.rb",
     "lib/remote/local_commander.rb",
     "lib/remote/remote_commander.rb",
+    "lib/remote/shell.rb",
     "lib/remote/task.rb",
     "remote.gemspec"
   ]
@@ -50,15 +49,18 @@ Gem::Specification.new do |s|
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<net-ssh>, [">= 0"])
       s.add_runtime_dependency(%q<rails>, ["~> 3.0"])
+      s.add_runtime_dependency(%q<ruby-termios>, [">= 0"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.8.3"])
     else
       s.add_dependency(%q<net-ssh>, [">= 0"])
       s.add_dependency(%q<rails>, ["~> 3.0"])
+      s.add_dependency(%q<ruby-termios>, [">= 0"])
       s.add_dependency(%q<jeweler>, ["~> 1.8.3"])
     end
   else
     s.add_dependency(%q<net-ssh>, [">= 0"])
     s.add_dependency(%q<rails>, ["~> 3.0"])
+    s.add_dependency(%q<ruby-termios>, [">= 0"])
     s.add_dependency(%q<jeweler>, ["~> 1.8.3"])
   end
 end

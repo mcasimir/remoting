@@ -10,8 +10,7 @@ module Remote
     
     def local(cmds)
       runline = cmds.map{|c| "#{c} 2>&1"}.join(";")
-
-      puts "[LOCAL]  Executing '#{runline}' ..."
+#      puts "[LOCAL]  Executing '#{runline}' ..."
       puts `#{runline}`
     end 
     

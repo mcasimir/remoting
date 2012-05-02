@@ -30,6 +30,6 @@ class Shell < Thor::Shell::Color
   end
   
   def error(message)
-    super("[ERROR] : " << message)
+    say(message, RED)
   end
 end

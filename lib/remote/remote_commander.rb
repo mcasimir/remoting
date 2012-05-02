@@ -1,5 +1,5 @@
 require 'remote/commander'
-require 'net/ssh'
+require 'remote/ssh'
 
 module Remote
   class RemoteCommander < Commander
@@ -13,27 +13,20 @@ module Remote
     def do_exec(cmds)
       remote(cmds)
     end
-    
-    def ssh(user_at_host) # eg ssh "usr@remoteserver" do |conn| ...
-      user, host = user_at_host.split("@")
-
-      Net::SSH.start(host, user) do |ssh|
-        yield(ssh)
-      end
-    end
-    
+       
     def remote(*cmds)
-      res = ""
-      runline = cmds.join(";")
+      opts = cmds.extract_options!
+      keep_alive = opts[:keep_alive]
+      user, host = login.split("@")
+      
+      ssh = ::Remote::Ssh.new(
+        :user => user,
+        :host => host,
+        :keep_alive => keep_alive
+      )
+      
+      ssh.exec(cmds)
 
-      puts "[REMOTE] Connecting to #{login} ..."
-      puts "[REMOTE] Executing '#{runline}' ..."
-
-      ssh(login) do |remote|
-        puts res = remote.exec!(runline)
-      end
-
-      res.split("\n").last if res # latest retval
     end
 
   end
