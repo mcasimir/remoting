@@ -1,60 +1,57 @@
-require 'termios'
 require 'net/ssh'
+require 'remote/shell'
 
-class Ssh
-  attr_reader :keep_alive, :host, :user
+module Remote
+  class Ssh
+    attr_reader  :host, :user
 
-  def initialize(*args)
-    options = args.extract_options!
-    @host, @user, @keep_alive = options.values_at(:host, :user, :keep_alive)    
-    @keep_alive = !!@keep_alive
-  end
-
-  def stdin_buffer( enable )
-    return unless defined?( Termios )
-    attr = Termios::getattr( $stdin )
-    if enable
-      attr.c_lflag |= Termios::ICANON | Termios::ECHO
-    else
-      attr.c_lflag &= ~(Termios::ICANON|Termios::ECHO)
+    def initialize(*args)
+      options = args.extract_options!
+      @host, @user, @interactive = options.values_at(:host, :user, :interactive)  
     end
-    Termios::setattr( $stdin, Termios::TCSANOW, attr )
-  end
 
-  def exec(commands)
-    if !keep_alive
-      commands << 'exit'
-    end
-    Net::SSH.start( host, user ) do |session|
 
-     begin
-        stdin_buffer false
-
-        shell = session.shell.open( :pty => true )
-        
-        commands.each do |command|
-          break unless shell.open?
-          shell.execute
-        end
-        
-        loop do
-          break unless shell.open?
-          if IO.select([$stdin],nil,nil,0.01)
-            data = $stdin.sysread(1)
-            shell.send_data data
-          end
-
-          $stdout.print shell.stdout while shell.stdout?
-          $stdout.flush
-        end
-      ensure
-        stdin_buffer true
-      end
-
+    def shell
+      @shell ||= ::Remote::Shell.new
     end
     
+    def exec(commands)
+
+      if interactive?
+        ssh = %(ssh #{user}@#{host})
+        Kernel.exec ssh + %( -t '#{commands.join("; ")}')  # this will replace the current process and will never return the shell back
+      else
+        Net::SSH.start(host, user) do |ssh|
+      
+          ssh.open_channel do |channel|
+            channel.exec(commands.join(";")) do |ch, success|
+              unless success
+                abort
+              end
+            
+              channel.on_data do |ch, data|
+                say "#{data}"
+              end
+
+              channel.on_extended_data do |ch, type, data|
+                shell.error "#{data}"
+              end
+
+              channel.on_close do |ch|
+                shell.bold "channel is closing!\n"
+              end
+            end
+          end
+
+          ssh.loop 
+        end        
+      end
+  
+    end # ~ exec
+        
+    def interactive?
+      !!@interactive
+    end
+
   end
-
-
 end
-

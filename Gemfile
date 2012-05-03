@@ -1,8 +1,8 @@
 source 'https://rubygems.org'
 
-gem "net-ssh"
 gem 'rails', '~> 3.0'
-gem 'ruby-termios'
+gem 'session'
+gem 'net-ssh'
 
 group :development do
   gem "jeweler", "~> 1.8.3"

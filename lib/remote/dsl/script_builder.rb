@@ -32,12 +32,6 @@ module Remote
             }
           end.flatten.compact.delete_if(&:empty?)
       end
-    
-      private
-
-      def method_missing(*args)
-        command(*args)       
-      end
 
       def command(*args)
         cmd = args.map(&:to_s).join(" ")
@@ -45,6 +39,13 @@ module Remote
         cmd
       end
     
+      private
+
+      def method_missing(*args)
+        command(*args)       
+      end
+
+
     end
     
   end

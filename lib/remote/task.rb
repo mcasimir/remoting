@@ -6,36 +6,33 @@ require 'remote/shell'
 module Remote
   module Task
     
+    def _remote_task_included
+    end
+    
     def config
       Remote.config
     end
     
-    def local(name = nil, &block)
+    def local(name, *args, &block)
       bold("Executing '#{name}' on local ...")
       commands  = ::Remote::Dsl::ScriptBuilder.build(&block)
-      commander = LocalCommander.new
+      commander = LocalCommander.new(*args)
       run(commander, commands) 
     end 
 
-    def remote(name = nil, login, &block)
+    def remote(name, login, *args, &block)
       bold("Executing '#{name}' on '#{login}' ...")
       commands = ::Remote::Dsl::ScriptBuilder.build(&block)      
-      commander = RemoteCommander.new(login)
+      commander = RemoteCommander.new(login, *args)
       run(commander, commands)
     end
     
     def run(commander, commands)
-      succeded = commander.exec(commands)
-      if succeded
-        success("Script execution completed succesfully")
-      else
-        error("Script execution terminated with an error status")
-      end
-      succeded
+      commander.exec(commands)
     end
 
     def shell
-      @shell ||= Shell.new
+      @shell ||= ::Remote::Shell.new
     end
 
     %w(bold error success yes? no? say continue?).each do |meth|
@@ -45,9 +42,9 @@ module Remote
   end
 end
 
-
-include Remote::Task
-
+unless self.respond_to?(:_remote_task_included)
+  include Remote::Task
+end
 
 
 

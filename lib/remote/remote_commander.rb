@@ -4,9 +4,11 @@ require 'remote/ssh'
 module Remote
   class RemoteCommander < Commander
     
-    attr_reader :login
-    def initialize(login)
+    attr_reader :login, :interactive
+    def initialize(login, *args)
+      options = args.extract_options!
       @login = login
+      @interactive = !!options[:interactive]
     end
     
     #overrides
@@ -14,15 +16,13 @@ module Remote
       remote(cmds)
     end
        
-    def remote(*cmds)
-      opts = cmds.extract_options!
-      keep_alive = opts[:keep_alive]
+    def remote(cmds)
       user, host = login.split("@")
       
       ssh = ::Remote::Ssh.new(
         :user => user,
         :host => host,
-        :keep_alive => keep_alive
+        :interactive => interactive
       )
       
       ssh.exec(cmds)
