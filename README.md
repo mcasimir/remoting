@@ -1,6 +1,6 @@
 # Remote
 
-*Remote* is a small alternative to Capistrano that is suitable to write remote management scripts with rake task. It provides a little framework to run remote commands over SSH with a DSL to define remote scripts.
+*Remote* is a great way to turn plain rake tasks in scripts to administer the server remotely. It provides a little framework to run remote commands over SSH along with a DSL to define remote scripts.
 
 Install
 
@@ -45,7 +45,7 @@ _ex._
  
 Methods invoked inside the `remote` block are executed inside a ssh session. `remote` takes two arguments: `name` and `login`. `name` serves only for logging purposal while `login` is the login string to access the server supplied in the form of `user@host`
 
-## DSL
+### DSL
 
 By examples
   
@@ -78,7 +78,9 @@ Methods invoked inside the `local` block are executed locally. `local` takes onl
 
 ### Interactive tasks
 
-One example over all:
+Invoking `remote` with `:interactive => true` will tell `remote` to yield the process to ssh, this way you will remotely interact with the server. On the other side everithing that is supposed to be executed after `remote` wont run. Despite this interactive tasks are very useful.
+
+#### Example 1. Rails remote console (by popular demand):
   
     # my_remote_task.rake
 
@@ -92,5 +94,64 @@ One example over all:
         bundle :exec, "rails c production"
       end
     end
+    
+####  Example 2. Reloading Apache configuration (involves sudo):
+    
+    task :reload do
+      require 'remote/task'
 
-Note: interactive ... ( to be continued ;) )
+      remote('reload', config.login, :interactive => true) do
+        sudo "/etc/init.d/apache2 reload"
+      end
+    end
+
+    
+
+## A note on modularity
+
+A complete deployment manager (like Capistrano even if probably not as good as it is) can be easily built over *remote*. Capistrano recipes can be ordinary rake tasks packed as gems. Plus various _deployment strategies_ can be assembled as dependencies of a main `deploy` task.
+
+    # Gemfile
+    gem 'remote_scm_git'          # provides 'remote:scm:push'
+    gem 'remote_server_passenger' # provides 'remote:server:restart'
+
+    # remote.rake
+    desc "Deploy application on server"
+    task :deploy => ["remote:scm:push", "remote:scm:pull", "remote:bundle", "remote:server:restart"] do
+    end
+
+
+## Examples
+
+You can find more examples under `examples` source directory
+
+
+## Coming Soon
+
+* Ability to define bunch of commands as functions
+* Pre-packed strategies     
+
+-----------------------------------------
+
+Copyright (c) 2012 mcasimir
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
