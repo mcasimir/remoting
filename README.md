@@ -112,12 +112,12 @@ Invoking `remote` with `:interactive => true` will tell `remote` to yield the pr
 A complete deployment manager (like Capistrano even if probably not as good as it is) can be easily built over *remote*. Capistrano recipes can be ordinary rake tasks packed as gems. Plus various _deployment strategies_ can be assembled as dependencies of a main `deploy` task.
 
     # Gemfile
-    gem 'remote_scm_git'          # provides 'remote:scm:push'
+    gem 'remote_scm_git'          # provides 'remote:scm:push, remote:scm:update_remote_code'
     gem 'remote_server_passenger' # provides 'remote:server:restart'
 
     # remote.rake
     desc "Deploy application on server"
-    task :deploy => ["remote:scm:push", "remote:scm:pull", "remote:bundle", "remote:server:restart"] do
+    task :deploy => ["remote:scm:push", "remote:scm:update_remote_code", "remote:bundle", "remote:server:restart"] do
     end
 
 
@@ -131,7 +131,7 @@ You can find more examples under `examples` source directory
 * Ability to define bunch of commands as functions
 * Pre-packed strategies     
 
------------------------------------------
+---
 
 Copyright (c) 2012 mcasimir
 
