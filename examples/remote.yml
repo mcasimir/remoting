@@ -1,7 +1,6 @@
 remote:
-  scm: git
   login: user@server
   dest: /var/ror/myapp
-  repo: git@gitserver:myapp
+  repo: git@gitserver:myapp.git
   ruby: 1.9.3
-  gemset: myapp
+  
