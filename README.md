@@ -28,7 +28,7 @@ Edit `config/remote.yml`
 
 ## Usage
 
-Just require 'remote/task' inside your tasks. You can also require it globally but is not recommended cause here `String` is patched to enable bash-flavoured syntax.
+Just require `remote/task` inside your tasks. NOTE: you can also require it globally but is not recommended cause here `String` is patched to enable bash-flavoured syntax.
 
 _ex._
 
@@ -53,7 +53,7 @@ By examples
 
       ps("aux") | grep("mysql") 
       echo 'noise' > "/dev/null"
-      echo 'setting=value' >> "ettings.conf"
+      echo 'setting=value' >> "settings.conf"
       tail -100 config.dir.join('log', 'logfile.log')
       command("[[ -f \"path\" ]] && run_a_command")
 
@@ -80,17 +80,17 @@ Methods invoked inside the `local` block are executed locally. `local` takes onl
 
 One example over all:
   
-  # my_remote_task.rake
+    # my_remote_task.rake
 
-  desc "Open rails console on server"
-  task :console do
-    require 'remote/task'
+    desc "Open rails console on server"
+    task :console do
+      require 'remote/task'
 
-    remote('console', config.login, :interactive => true) do
-      cd config.dest
-      source '$HOME/.rvm/scripts/rvm'
-      bundle :exec, "rails c production"
+      remote('console', config.login, :interactive => true) do
+        cd config.dest
+        source '$HOME/.rvm/scripts/rvm'
+        bundle :exec, "rails c production"
+      end
     end
-  end
 
 Note: interactive ... ( to be continued ;) )
