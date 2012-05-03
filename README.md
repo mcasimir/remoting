@@ -18,7 +18,7 @@ Edit `config/remote.yml`
 
     remote:
       any_setting_you_like: Here you can define properties that will be available in 'config' struct inside rake tasks!
-      example: Below are some tipical configuration settings you may wish to define:
+      example: Below are some tipical configuration settings you may wish to define ...
       login: user@server
       dest: /var/ror/myapp
       repo: git@gitserver:myapp.git
@@ -104,8 +104,7 @@ Invoking `remote` with `:interactive => true` will tell `remote` to yield the pr
         sudo "/etc/init.d/apache2 reload"
       end
     end
-
-    
+        
 
 ## A note on modularity
 
