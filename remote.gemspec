@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "remote"
-  s.version = "0.1.0"
+  s.version = "0.2.8"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["mcasimir"]
-  s.date = "2012-05-02"
+  s.date = "2012-05-04"
   s.description = "Remote is a lightweight alternative to Capistrano that is suitable for small projects. It provides some common Deploying Strategies (eg. git + passenger + rvm) and a little framework to run remote commands over SSH with a DSL to define remote scripts."
   s.email = "maurizio.cas@gmail.com"
   s.extra_rdoc_files = [
@@ -23,7 +23,8 @@ Gem::Specification.new do |s|
     "README.md",
     "Rakefile",
     "VERSION",
-    "example.yml",
+    "examples/remote.rake",
+    "examples/remote.yml",
     "lib/generators/remote/install_generator.rb",
     "lib/remote.rb",
     "lib/remote/commander.rb",
