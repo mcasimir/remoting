@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["mcasimir"]
   s.date = "2012-05-04"
-  s.description = "Remote is a lightweight alternative to Capistrano that is suitable for small projects. It provides some common Deploying Strategies (eg. git + passenger + rvm) and a little framework to run remote commands over SSH with a DSL to define remote scripts."
+  s.description = "Remote is a great way to turn plain rake tasks in scripts to administer the server remotely. It provides a little framework to run remote commands over SSH along with a DSL to define remote scripts."
   s.email = "maurizio.cas@gmail.com"
   s.extra_rdoc_files = [
     "LICENSE.txt",
@@ -43,7 +43,7 @@ Gem::Specification.new do |s|
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
   s.rubygems_version = "1.8.24"
-  s.summary = "Deploy applications with Rake task"
+  s.summary = "Remote \u{2013} turn plain rake tasks in scripts to administer the server remotely"
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
