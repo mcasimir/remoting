@@ -1,10 +1,10 @@
-# Remote
+# Remoting
 
-*Remote* is a great way to turn plain rake tasks in scripts to administer the server remotely. It provides a little framework to run remote commands over SSH along with a DSL to define remote scripts.
+*Remoting* is a great way to turn plain rake tasks in scripts to administer the server remotingly. It provides a little framework to run remoting commands over SSH along with a DSL to define remoting scripts.
 
 Install
 
-    gem 'remote', :git => "git@github.com:mcasimir/remote.git"
+    gem 'remoting'
     
 Update your bundle
   
@@ -12,10 +12,11 @@ Update your bundle
 
 Generate `remote.yml` stub
 
-    rails g remote:install
+    rails g remoting:install
 
 Edit `config/remote.yml`
 
+``` yml
     remote:
       any_setting_you_like: Here you can define properties that will be available in 'config' struct inside rake tasks!
       example: Below are some tipical configuration settings you may wish to define ...
@@ -24,17 +25,17 @@ Edit `config/remote.yml`
       repo: git@gitserver:myapp.git
       ruby: 1.9.3
       gemset: myapp
-      
+```       
 
 ## Usage
 
-Just require `remote/task` inside your tasks. NOTE: you can also require it globally but is not recommended cause here `String` is patched to enable bash-flavoured syntax.
+Just require `remoting/task` inside your tasks. NOTE: you can also require it globally but is not recommended cause here `String` is patched to enable bash-flavoured syntax.
 
 _ex._
 
     desc "Restart the server"
     task :restart do
-      require 'remote/task'
+      require 'remoting/task'
     
       remote('restart', config.login) do
        mkdir '-p', config.dest.join('tmp')
@@ -65,7 +66,7 @@ You can also define local tasks using the same DSL
 
     desc "Setup git origin"
     task :init do
-      require 'remote/task'
+      require 'remoting/task'
     
       local('init') do
         git :init
@@ -86,7 +87,7 @@ Invoking `remote` with `:interactive => true` will tell `remote` to yield the pr
 
     desc "Open rails console on server"
     task :console do
-      require 'remote/task'
+      require 'remoting/task'
 
       remote('console', config.login, :interactive => true) do
         cd config.dest
@@ -98,7 +99,7 @@ Invoking `remote` with `:interactive => true` will tell `remote` to yield the pr
 ####  Example 2. Reloading Apache configuration (involves sudo):
     
     task :reload do
-      require 'remote/task'
+      require 'remoting/task'
 
       remote('reload', config.login, :interactive => true) do
         sudo "/etc/init.d/apache2 reload"
@@ -108,15 +109,15 @@ Invoking `remote` with `:interactive => true` will tell `remote` to yield the pr
 
 ## A note on modularity
 
-A complete deployment manager (like Capistrano even if probably not as good as it is) can be easily built over *remote*. Capistrano recipes can be ordinary rake tasks packed as gems. Plus various _deployment strategies_ can be assembled as dependencies of a main `deploy` task.
+A complete deployment manager (like Capistrano even if probably not as good as it is) can be easily built over *remoting*. Capistrano recipes can be ordinary rake tasks packed as gems. Plus various _deployment strategies_ can be assembled as dependencies of a main `deploy` task.
 
     # Gemfile
-    gem 'remote_scm_git'          # provides 'remote:scm:push, remote:scm:update_remote_code'
-    gem 'remote_server_passenger' # provides 'remote:server:restart'
+    gem 'remoting_scm_git'          # provides 'remoting:scm:push, remoting:scm:update_remoting_code'
+    gem 'remoting_server_passenger' # provides 'remoting:server:restart'
 
-    # remote.rake
+    # remoting.rake
     desc "Deploy application on server"
-    task :deploy => ["remote:scm:push", "remote:scm:update_remote_code", "remote:bundle", "remote:server:restart"] do
+    task :deploy => ["remoting:scm:push", "remoting:scm:update_remoting_code", "remoting:bundle", "remoting:server:restart"] do
     end
 
 

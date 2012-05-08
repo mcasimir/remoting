@@ -1,4 +1,4 @@
-module Remote
+module Remoting
   class Engine < Rails::Engine
   
   end

@@ -13,11 +13,12 @@ require 'rake'
 
 require 'jeweler'
 Jeweler::Tasks.new do |gem|
-  gem.name = "remote"
-  gem.homepage = "http://github.com/mcasimir/remote"
+  # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
+  gem.name = "remoting"
+  gem.homepage = "http://github.com/mcasimir/remoting"
   gem.license = "MIT"
-  gem.summary = %Q{Remote – turn plain rake tasks in scripts to administer the server remotely}
-  gem.description = %Q{Remote is a great way to turn plain rake tasks in scripts to administer the server remotely. It provides a little framework to run remote commands over SSH along with a DSL to define remote scripts.}
+  gem.summary = %Q{Turn plain rake tasks in scripts to administer the server remote.}
+  gem.description = %Q{Remoting is a great way to turn plain rake tasks in scripts to administer the server remote. It provides a little framework to run remoting commands over SSH along with a DSL to define remoting scripts.}
   gem.email = "maurizio.cas@gmail.com"
   gem.authors = ["mcasimir"]
   # dependencies defined in Gemfile

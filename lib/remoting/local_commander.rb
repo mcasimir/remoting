@@ -1,6 +1,6 @@
-require 'remote/commander'
+require 'remoting/commander'
 
-module Remote
+module Remoting
   class LocalCommander < Commander
     
     #overrides

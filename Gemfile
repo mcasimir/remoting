@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
 
 gem 'rails', '~> 3.0'
-gem 'session'
 gem 'net-ssh'
 
 group :development do

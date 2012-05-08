@@ -1,28 +1,28 @@
-require 'remote/dsl/script_builder'
-require 'remote/local_commander'
-require 'remote/remote_commander'
-require 'remote/shell'
+require 'remoting/dsl/script_builder'
+require 'remoting/local_commander'
+require 'remoting/remoting_commander'
+require 'remoting/shell'
 
-module Remote
+module Remoting
   module Task
     
-    def _remote_task_included
+    def _remoting_task_included
     end
     
     def config
-      Remote.config
+      remoting.config
     end
     
     def local(name, *args, &block)
       bold("Executing '#{name}' on local ...")
-      commands  = ::Remote::Dsl::ScriptBuilder.build(&block)
+      commands  = ::remoting::Dsl::ScriptBuilder.build(&block)
       commander = LocalCommander.new(*args)
       run(commander, commands) 
     end 
 
     def remote(name, login, *args, &block)
       bold("Executing '#{name}' on '#{login}' ...")
-      commands = ::Remote::Dsl::ScriptBuilder.build(&block)      
+      commands = ::remoting::Dsl::ScriptBuilder.build(&block)      
       commander = RemoteCommander.new(login, *args)
       run(commander, commands)
     end
@@ -32,7 +32,7 @@ module Remote
     end
 
     def shell
-      @shell ||= ::Remote::Shell.new
+      @shell ||= ::remoting::Shell.new
     end
 
     %w(bold error success yes? no? say continue?).each do |meth|
@@ -42,8 +42,8 @@ module Remote
   end
 end
 
-unless self.respond_to?(:_remote_task_included)
-  include Remote::Task
+unless self.respond_to?(:_remoting_task_included)
+  include remoting::Task
 end
 
 

@@ -1,7 +1,7 @@
-require 'remote/commander'
-require 'remote/ssh'
+require 'remoting/commander'
+require 'remoting/ssh'
 
-module Remote
+module Remoting
   class RemoteCommander < Commander
     
     attr_reader :login, :interactive
@@ -19,14 +19,13 @@ module Remote
     def remote(cmds)
       user, host = login.split("@")
       
-      ssh = ::Remote::Ssh.new(
+      ssh = ::remoting::Ssh.new(
         :user => user,
         :host => host,
         :interactive => interactive
       )
       
       ssh.exec(cmds)
-
     end
 
   end

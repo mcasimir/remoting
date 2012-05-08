@@ -1,7 +1,7 @@
 require 'yaml'
 require 'ostruct'
 
-module Remote
+module Remoting
   class Config < OpenStruct
 
     def initialize

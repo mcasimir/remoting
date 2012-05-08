@@ -1,4 +1,4 @@
-module Remote
+module Remoting
   module Generators
     class InstallGenerator < Rails::Generators::Base
       def create_remote_yml

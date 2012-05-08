@@ -1,6 +1,6 @@
-require 'remote/dsl/string'
+require 'remoting/dsl/string'
 
-module Remote
+module Remoting
   module Dsl
     
     class ScriptBuilder

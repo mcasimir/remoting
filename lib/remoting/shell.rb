@@ -1,6 +1,6 @@
 require 'thor'
 
-module Remote
+module Remoting
   class Shell < Thor::Shell::Color
     def ask_password(*args)
       system "stty -echo" 

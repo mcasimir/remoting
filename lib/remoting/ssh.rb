@@ -1,7 +1,7 @@
 require 'net/ssh'
-require 'remote/shell'
+require 'remoting/shell'
 
-module Remote
+module Remoting
   class Ssh
     attr_reader  :host, :user
 
@@ -12,7 +12,7 @@ module Remote
 
 
     def shell
-      @shell ||= ::Remote::Shell.new
+      @shell ||= ::remoting::Shell.new
     end
     
     def exec(commands)

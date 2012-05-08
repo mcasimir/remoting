@@ -1,7 +1,7 @@
 namespace :remote do
 
   task :info do
-    require 'remote/task'
+    require 'remoting/task'
     
     remote('info', config.login) do
       source "~/.profile"
@@ -17,7 +17,7 @@ namespace :remote do
 
   desc "Setup git origin"
   task :init do
-    require 'remote/task'
+    require 'remoting/task'
     
     local('init') do
       git :init
@@ -27,7 +27,7 @@ namespace :remote do
   
   desc "Initialize remote"
   task :setup do
-    require 'remote/task'
+    require 'remoting/task'
     
     remote('setup', config.login) do
       git :clone, config.repo, config.dest
@@ -36,7 +36,7 @@ namespace :remote do
 
   desc "Commit everything to remote git repository"
   task :push, [:message] do |t, args|
-    require 'remote/task'
+    require 'remoting/task'
     
     message = args[:message] || "commit #{Time.now}"
 
@@ -49,7 +49,7 @@ namespace :remote do
   
   desc "Update remote code pulling from repository"
   task :pull_on_remote do
-    require 'remote/task'
+    require 'remoting/task'
     
     schema        = config.dest.join('db', 'schema.rb')
     tmp_schema    = config.tmp.join("#{config.app}_#{Time.now.to_i}_schema.rb.tmp")
@@ -67,7 +67,7 @@ namespace :remote do
   
   desc "Restart the server"
   task :restart do
-    require 'remote/task'
+    require 'remoting/task'
     
     remote('restart', config.login) do
       mkdir '-p', config.dest.join('tmp')
@@ -78,7 +78,7 @@ namespace :remote do
   
   desc "Hard reset repo on server"
   task :reset do
-    require 'remote/task'
+    require 'remoting/task'
 
     remote('reset', config.login) do
       cd  config.dest
@@ -90,7 +90,7 @@ namespace :remote do
   
   desc "Run bundle install on the server"
   task :bundle do
-    require 'remote/task'
+    require 'remoting/task'
 
     remote('bundle', config.login) do
       source "~/.profile"
@@ -109,7 +109,7 @@ namespace :remote do
 
   desc "Run rake tasks on server"
   task :rake, [:invocation] do |t, args|
-    require 'remote/task'
+    require 'remoting/task'
 
     invocation = args[:invocation]
 
@@ -125,14 +125,14 @@ namespace :remote do
 
   desc "Open a remote shell session on server"
   task :ssh do
-    require 'remote/task'
+    require 'remoting/task'
     remote('ssh', config.login, :interactive => true) do
     end
   end
   
   desc "Dump a remote logfile"
   task :log, [:lines, :filename] do |t, args|
-    require 'remote/task'
+    require 'remoting/task'
 
     filename, lines = args.values_at(:lines, :filename)
     filename ||= "production"
@@ -152,7 +152,7 @@ namespace :remote do
   
   desc "Run tail -f on logfile"
   task :logtail, [:filename] do |t, args|
-    require 'remote/task'
+    require 'remoting/task'
 
     filename=  args[:filename]
     filename ||= "production"
@@ -166,7 +166,7 @@ namespace :remote do
 
   desc "Open a remote console"
   task :console do
-    require 'remote/task'
+    require 'remoting/task'
 
     remote('console', config.login, :interactive => true) do
       cd config.dest
@@ -177,7 +177,7 @@ namespace :remote do
 
   desc "Update crontab with whenever schedule"
   task :whenever do
-    require 'remote/task'
+    require 'remoting/task'
 
     remote('whenever', config.login) do
       cd  config.dest
@@ -188,7 +188,7 @@ namespace :remote do
   
   namespace :apache do
     task :ensite do
-      require 'remote/task'
+      require 'remoting/task'
       remote('ensite', config.login, :interactive => true) do
         cd "/etc/apache2/sites-enabled"
         sudo "ln -s #{config.dest.join('config', 'apache.conf')} #{config.app}"
@@ -196,7 +196,7 @@ namespace :remote do
     end
     
     task :reload do
-      require 'remote/task'
+      require 'remoting/task'
 
       remote('reload', config.login, :interactive => true) do
         sudo "/etc/init.d/apache2 reload"
@@ -209,7 +209,7 @@ namespace :remote do
 
     desc 'Precompile assets'
     task :precompile do
-      require 'remote/task'
+      require 'remoting/task'
 
       remote('rake assets:precompile', config.login) do
       
@@ -229,7 +229,7 @@ namespace :remote do
 
       desc "Migrate remote database"
       task :migrate do |t, args|
-        require 'remote/task'
+        require 'remoting/task'
     
         remote('rake db:migrate', config.login) do
           source "$HOME/.rvm/scripts/rvm"
