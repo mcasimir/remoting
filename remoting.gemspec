@@ -36,7 +36,8 @@ Gem::Specification.new do |s|
     "lib/remoting/remote_commander.rb",
     "lib/remoting/shell.rb",
     "lib/remoting/ssh.rb",
-    "lib/remoting/task.rb"
+    "lib/remoting/task.rb",
+    "remoting.gemspec"
   ]
   s.homepage = "http://github.com/mcasimir/remoting"
   s.licenses = ["MIT"]
