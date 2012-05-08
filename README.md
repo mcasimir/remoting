@@ -33,6 +33,7 @@ Just require `remoting/task` inside your tasks. NOTE: you can also require it gl
 
 _ex._
 
+``` rb   
     desc "Restart the server"
     task :restart do
       require 'remoting/task'
@@ -43,13 +44,15 @@ _ex._
       end
     
     end
+```
  
 Methods invoked inside the `remote` block are executed inside a ssh session. `remote` takes two arguments: `name` and `login`. `name` serves only for logging purposal while `login` is the login string to access the server supplied in the form of `user@host`
 
 ### DSL
 
 By examples
-  
+
+``` rb
     remote("my task", config.login) do 
 
       ps("aux") | grep("mysql") 
@@ -59,11 +62,13 @@ By examples
       command("[[ -f \"path\" ]] && run_a_command")
 
     end
+```
 
 ### Local Tasks using DSL
 
 You can also define local tasks using the same DSL
 
+``` rb   
     desc "Setup git origin"
     task :init do
       require 'remoting/task'
@@ -73,6 +78,7 @@ You can also define local tasks using the same DSL
         git :remote, :add, :origin, config.repo
       end  
     end
+```
 
 Methods invoked inside the `local` block are executed locally. `local` takes only the `name` parameter.
 
@@ -82,7 +88,8 @@ Methods invoked inside the `local` block are executed locally. `local` takes onl
 Invoking `remote` with `:interactive => true` will tell `remote` to yield the process to ssh, this way you will remotely interact with the server. On the other side everithing that is supposed to be executed after `remote` wont run. Despite this interactive tasks are very useful.
 
 #### Example 1. Rails remote console (by popular demand):
-  
+
+``` rb  
     # my_remote_task.rake
 
     desc "Open rails console on server"
@@ -95,9 +102,11 @@ Invoking `remote` with `:interactive => true` will tell `remote` to yield the pr
         bundle :exec, "rails c production"
       end
     end
+```
     
 ####  Example 2. Reloading Apache configuration (involves sudo):
-    
+
+``` rb   
     task :reload do
       require 'remoting/task'
 
@@ -105,12 +114,13 @@ Invoking `remote` with `:interactive => true` will tell `remote` to yield the pr
         sudo "/etc/init.d/apache2 reload"
       end
     end
-        
+```
 
 ## A note on modularity
 
 A complete deployment manager (like Capistrano even if probably not as good as it is) can be easily built over *remoting*. Capistrano recipes can be ordinary rake tasks packed as gems. Plus various _deployment strategies_ can be assembled as dependencies of a main `deploy` task.
 
+``` rb
     # Gemfile
     gem 'remoting_scm_git'          # provides 'remoting:scm:push, remoting:scm:update_remoting_code'
     gem 'remoting_server_passenger' # provides 'remoting:server:restart'
@@ -119,7 +129,7 @@ A complete deployment manager (like Capistrano even if probably not as good as i
     desc "Deploy application on server"
     task :deploy => ["remoting:scm:push", "remoting:scm:update_remoting_code", "remoting:bundle", "remoting:server:restart"] do
     end
-
+```
 
 ## Examples
 
