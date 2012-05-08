@@ -16,15 +16,15 @@ Generate `remote.yml` stub
 
 Edit `config/remote.yml`
 
-``` yml
-    remote:
-      any_setting_you_like: Here you can define properties that will be available in 'config' struct inside rake tasks!
-      example: Below are some tipical configuration settings you may wish to define ...
-      login: user@server
-      dest: /var/ror/myapp
-      repo: git@gitserver:myapp.git
-      ruby: 1.9.3
-      gemset: myapp
+``` yaml
+remote:
+  any_setting_you_like: Here you can define properties that will be available in 'config' struct inside rake tasks!
+  example: Below are some tipical configuration settings you may wish to define ...
+  login: user@server
+  dest: /var/ror/myapp
+  repo: git@gitserver:myapp.git
+  ruby: 1.9.3
+  gemset: myapp
 ```       
 
 ## Usage
@@ -34,16 +34,16 @@ Just require `remoting/task` inside your tasks. NOTE: you can also require it gl
 _ex._
 
 ``` rb   
-    desc "Restart the server"
-    task :restart do
-      require 'remoting/task'
+desc "Restart the server"
+task :restart do
+  require 'remoting/task'
     
-      remote('restart', config.login) do
-       mkdir '-p', config.dest.join('tmp')
-       touch config.dest.join('tmp', 'restart.txt') 
-      end
+  remote('restart', config.login) do
+   mkdir '-p', config.dest.join('tmp')
+   touch config.dest.join('tmp', 'restart.txt') 
+  end
     
-    end
+end
 ```
  
 Methods invoked inside the `remote` block are executed inside a ssh session. `remote` takes two arguments: `name` and `login`. `name` serves only for logging purposal while `login` is the login string to access the server supplied in the form of `user@host`
@@ -53,15 +53,15 @@ Methods invoked inside the `remote` block are executed inside a ssh session. `re
 By examples
 
 ``` rb
-    remote("my task", config.login) do 
+remote("my task", config.login) do 
 
-      ps("aux") | grep("mysql") 
-      echo 'noise' > "/dev/null"
-      echo 'setting=value' >> "settings.conf"
-      tail -100 config.dir.join('log', 'logfile.log')
-      command("[[ -f \"path\" ]] && run_a_command")
+  ps("aux") | grep("mysql") 
+  echo 'noise' > "/dev/null"
+  echo 'setting=value' >> "settings.conf"
+  tail -100 config.dir.join('log', 'logfile.log')
+  command("[[ -f \"path\" ]] && run_a_command")
 
-    end
+end
 ```
 
 ### Local Tasks using DSL
@@ -69,15 +69,15 @@ By examples
 You can also define local tasks using the same DSL
 
 ``` rb   
-    desc "Setup git origin"
-    task :init do
-      require 'remoting/task'
+desc "Setup git origin"
+task :init do
+  require 'remoting/task'
     
-      local('init') do
-        git :init
-        git :remote, :add, :origin, config.repo
-      end  
-    end
+  local('init') do
+    git :init
+    git :remote, :add, :origin, config.repo
+  end  
+end
 ```
 
 Methods invoked inside the `local` block are executed locally. `local` takes only the `name` parameter.
@@ -90,30 +90,30 @@ Invoking `remote` with `:interactive => true` will tell `remote` to yield the pr
 #### Example 1. Rails remote console (by popular demand):
 
 ``` rb  
-    # my_remote_task.rake
+# my_remote_task.rake
 
-    desc "Open rails console on server"
-    task :console do
-      require 'remoting/task'
+desc "Open rails console on server"
+task :console do
+  require 'remoting/task'
 
-      remote('console', config.login, :interactive => true) do
-        cd config.dest
-        source '$HOME/.rvm/scripts/rvm'
-        bundle :exec, "rails c production"
-      end
-    end
+  remote('console', config.login, :interactive => true) do
+    cd config.dest
+    source '$HOME/.rvm/scripts/rvm'
+    bundle :exec, "rails c production"
+  end
+end
 ```
     
 ####  Example 2. Reloading Apache configuration (involves sudo):
 
 ``` rb   
-    task :reload do
-      require 'remoting/task'
+task :reload do
+  require 'remoting/task'
 
-      remote('reload', config.login, :interactive => true) do
-        sudo "/etc/init.d/apache2 reload"
-      end
-    end
+  remote('reload', config.login, :interactive => true) do
+    sudo "/etc/init.d/apache2 reload"
+  end
+end
 ```
 
 ## A note on modularity
@@ -121,14 +121,14 @@ Invoking `remote` with `:interactive => true` will tell `remote` to yield the pr
 A complete deployment manager (like Capistrano even if probably not as good as it is) can be easily built over *remoting*. Capistrano recipes can be ordinary rake tasks packed as gems. Plus various _deployment strategies_ can be assembled as dependencies of a main `deploy` task.
 
 ``` rb
-    # Gemfile
-    gem 'remoting_scm_git'          # provides 'remoting:scm:push, remoting:scm:update_remoting_code'
-    gem 'remoting_server_passenger' # provides 'remoting:server:restart'
+# Gemfile
+gem 'remoting_scm_git'          # provides 'remoting:scm:push, remoting:scm:update_remoting_code'
+gem 'remoting_server_passenger' # provides 'remoting:server:restart'
 
-    # remoting.rake
-    desc "Deploy application on server"
-    task :deploy => ["remoting:scm:push", "remoting:scm:update_remoting_code", "remoting:bundle", "remoting:server:restart"] do
-    end
+# remoting.rake
+desc "Deploy application on server"
+task :deploy => ["remoting:scm:push", "remoting:scm:update_remoting_code", "remoting:bundle", "remoting:server:restart"] do
+end
 ```
 
 ## Examples
