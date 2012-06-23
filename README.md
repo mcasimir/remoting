@@ -1,6 +1,6 @@
 # Remoting
 
-*Remoting* is a great way to turn plain rake tasks in scripts to administer the server remote. It provides a little framework to run remote commands over SSH along with a DSL to define remote scripts.
+*Remoting* is a great way to turn plain rake tasks in scripts to manage your production server remotely. It provides a little framework to run remote commands over SSH along with a DSL to define remote scripts. Interactive tasks that involves `sudo` are supported too.
 
 Install
 
