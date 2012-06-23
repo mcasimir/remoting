@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "remoting"
-  s.version = "0.2.11"
+  s.version = "0.2.12"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["mcasimir"]
-  s.date = "2012-05-08"
+  s.date = "2012-06-23"
   s.description = "Remoting is a great way to turn plain rake tasks in scripts to administer the server remote. It provides a little framework to run remote commands over SSH along with a DSL to define remote scripts."
   s.email = "maurizio.cas@gmail.com"
   s.extra_rdoc_files = [
