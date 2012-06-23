@@ -1,6 +1,6 @@
 require 'remoting/dsl/script_builder'
 require 'remoting/local_commander'
-require 'remoting/remoting_commander'
+require 'remoting/remote_commander'
 require 'remoting/shell'
 
 module Remoting
