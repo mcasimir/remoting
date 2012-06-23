@@ -15,14 +15,14 @@ module Remoting
     
     def local(name, *args, &block)
       bold("Executing '#{name}' on local ...")
-      commands  = ::remoting::Dsl::ScriptBuilder.build(&block)
+      commands  = ::Remoting::Dsl::ScriptBuilder.build(&block)
       commander = LocalCommander.new(*args)
       run(commander, commands) 
     end 
 
     def remote(name, login, *args, &block)
       bold("Executing '#{name}' on '#{login}' ...")
-      commands = ::remoting::Dsl::ScriptBuilder.build(&block)      
+      commands = ::Remoting::Dsl::ScriptBuilder.build(&block)      
       commander = RemoteCommander.new(login, *args)
       run(commander, commands)
     end
@@ -32,7 +32,7 @@ module Remoting
     end
 
     def shell
-      @shell ||= ::remoting::Shell.new
+      @shell ||= ::Remoting::Shell.new
     end
 
     %w(bold error success yes? no? say continue?).each do |meth|
@@ -43,7 +43,7 @@ module Remoting
 end
 
 unless self.respond_to?(:_remoting_task_included)
-  include remoting::Task
+  include Remoting::Task
 end
 
 
