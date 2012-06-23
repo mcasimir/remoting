@@ -19,7 +19,7 @@ module Remoting
     def remote(cmds)
       user, host = login.split("@")
       
-      ssh = ::remoting::Ssh.new(
+      ssh = ::Remoting::Ssh.new(
         :user => user,
         :host => host,
         :interactive => interactive

@@ -12,7 +12,7 @@ module Remoting
 
 
     def shell
-      @shell ||= ::remoting::Shell.new
+      @shell ||= ::Remoting::Shell.new
     end
     
     def exec(commands)

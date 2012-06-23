@@ -10,7 +10,7 @@ module Remoting
     end
     
     def config
-      remoting.config
+      ::Remoting.config
     end
     
     def local(name, *args, &block)
