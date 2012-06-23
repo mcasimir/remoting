@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = "remoting"
-  s.version = "0.2.12"
+  s.version = "0.2.13"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["mcasimir"]
@@ -37,6 +37,7 @@ Gem::Specification.new do |s|
     "lib/remoting/shell.rb",
     "lib/remoting/ssh.rb",
     "lib/remoting/task.rb",
+    "pkg/remoting-0.2.12.gem",
     "remoting.gemspec"
   ]
   s.homepage = "http://github.com/mcasimir/remoting"
