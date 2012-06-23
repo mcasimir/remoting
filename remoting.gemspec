@@ -37,7 +37,6 @@ Gem::Specification.new do |s|
     "lib/remoting/shell.rb",
     "lib/remoting/ssh.rb",
     "lib/remoting/task.rb",
-    "pkg/remoting-0.2.13.gem",
     "remoting.gemspec"
   ]
   s.homepage = "http://github.com/mcasimir/remoting"
