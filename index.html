@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Remoting by mcasimir</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Remoting</h1>
+          <h2>Remoting – turn plain rake tasks in scripts to manage your production server remotely</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/mcasimir/remoting/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/mcasimir/remoting/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/mcasimir/remoting" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>Remoting</h1>
+
+<p><em>Remoting</em> is a great way to turn plain rake tasks in scripts to manage your production server remotely. It provides a little framework to run remote commands over SSH along with a DSL to define remote scripts. Interactive tasks that involves <code>sudo</code> are supported too.</p>
+
+<p>Install</p>
+
+<pre><code>gem 'remoting'
+</code></pre>
+
+<p>Update your bundle</p>
+
+<pre><code>bundle install
+</code></pre>
+
+<p>Generate <code>remote.yml</code> stub</p>
+
+<pre><code>rails g remoting:install
+</code></pre>
+
+<p>Edit <code>config/remote.yml</code></p>
+
+<div class="highlight">
+<pre><span class="l-Scalar-Plain">remote</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">any_setting_you_like</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Here you can define properties that will be available in 'config' struct inside rake tasks!</span>
+  <span class="l-Scalar-Plain">example</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Below are some tipical configuration settings you may wish to define ...</span>
+  <span class="l-Scalar-Plain">login</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">user@server</span>
+  <span class="l-Scalar-Plain">dest</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">/var/ror/myapp</span>
+  <span class="l-Scalar-Plain">repo</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">git@gitserver:myapp.git</span>
+  <span class="l-Scalar-Plain">ruby</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">1.9.3</span>
+  <span class="l-Scalar-Plain">gemset</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">myapp</span>
+</pre>
+</div>
+
+
+<h2>Usage</h2>
+
+<p>Just require <code>remoting/task</code> inside your tasks. NOTE: you can also require it globally but is not recommended cause here <code>String</code> is patched to enable bash-flavoured syntax.</p>
+
+<p><em>ex.</em></p>
+
+<div class="highlight">
+<pre><span class="n">desc</span> <span class="s2">"Restart the server"</span>
+<span class="n">task</span> <span class="ss">:restart</span> <span class="k">do</span>
+  <span class="nb">require</span> <span class="s1">'remoting/task'</span>
+
+  <span class="n">remote</span><span class="p">(</span><span class="s1">'restart'</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">login</span><span class="p">)</span> <span class="k">do</span>
+   <span class="n">mkdir</span> <span class="s1">'-p'</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">dest</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">'tmp'</span><span class="p">)</span>
+   <span class="n">touch</span> <span class="n">config</span><span class="o">.</span><span class="n">dest</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">'tmp'</span><span class="p">,</span> <span class="s1">'restart.txt'</span><span class="p">)</span> 
+  <span class="k">end</span>
+
+<span class="k">end</span>
+</pre>
+</div>
+
+
+<p>Methods invoked inside the <code>remote</code> block are executed inside a ssh session. <code>remote</code> takes two arguments: <code>name</code> and <code>login</code>. <code>name</code> serves only for logging purposal while <code>login</code> is the login string to access the server supplied in the form of <code>user@host</code></p>
+
+<h3>DSL</h3>
+
+<p>By examples</p>
+
+<div class="highlight">
+<pre><span class="n">remote</span><span class="p">(</span><span class="s2">"my task"</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">login</span><span class="p">)</span> <span class="k">do</span> 
+
+  <span class="n">ps</span><span class="p">(</span><span class="s2">"aux"</span><span class="p">)</span> <span class="o">|</span> <span class="n">grep</span><span class="p">(</span><span class="s2">"mysql"</span><span class="p">)</span> 
+  <span class="n">echo</span> <span class="s1">'noise'</span> <span class="o">&gt;</span> <span class="s2">"/dev/null"</span>
+  <span class="n">echo</span> <span class="s1">'setting=value'</span> <span class="o">&gt;&gt;</span> <span class="s2">"settings.conf"</span>
+  <span class="n">tail</span> <span class="o">-</span><span class="mi">100</span> <span class="n">config</span><span class="o">.</span><span class="n">dir</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">'log'</span><span class="p">,</span> <span class="s1">'logfile.log'</span><span class="p">)</span>
+  <span class="n">command</span><span class="p">(</span><span class="s2">"[[ -f </span><span class="se">\"</span><span class="s2">path</span><span class="se">\"</span><span class="s2"> ]] &amp;&amp; run_a_command"</span><span class="p">)</span>
+
+<span class="k">end</span>
+</pre>
+</div>
+
+
+<h3>Local Tasks using DSL</h3>
+
+<p>You can also define local tasks using the same DSL</p>
+
+<div class="highlight">
+<pre><span class="n">desc</span> <span class="s2">"Setup git origin"</span>
+<span class="n">task</span> <span class="ss">:init</span> <span class="k">do</span>
+  <span class="nb">require</span> <span class="s1">'remoting/task'</span>
+
+  <span class="n">local</span><span class="p">(</span><span class="s1">'init'</span><span class="p">)</span> <span class="k">do</span>
+    <span class="n">git</span> <span class="ss">:init</span>
+    <span class="n">git</span> <span class="ss">:remote</span><span class="p">,</span> <span class="ss">:add</span><span class="p">,</span> <span class="ss">:origin</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">repo</span>
+  <span class="k">end</span>  
+<span class="k">end</span>
+</pre>
+</div>
+
+
+<p>Methods invoked inside the <code>local</code> block are executed locally. <code>local</code> takes only the <code>name</code> parameter.</p>
+
+<h3>Interactive tasks</h3>
+
+<p>Invoking <code>remote</code> with <code>:interactive =&gt; true</code> will tell <code>remote</code> to yield the process to ssh, this way you will remotely interact with the server. On the other side everithing that is supposed to be executed after <code>remote</code> wont run. Despite this interactive tasks are very useful.</p>
+
+<h4>Example 1. Rails remote console (by popular demand):</h4>
+
+<div class="highlight">
+<pre><span class="c1"># my_remote_task.rake</span>
+
+<span class="n">desc</span> <span class="s2">"Open rails console on server"</span>
+<span class="n">task</span> <span class="ss">:console</span> <span class="k">do</span>
+  <span class="nb">require</span> <span class="s1">'remoting/task'</span>
+
+  <span class="n">remote</span><span class="p">(</span><span class="s1">'console'</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">login</span><span class="p">,</span> <span class="ss">:interactive</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span> <span class="k">do</span>
+    <span class="n">cd</span> <span class="n">config</span><span class="o">.</span><span class="n">dest</span>
+    <span class="n">source</span> <span class="s1">'$HOME/.rvm/scripts/rvm'</span>
+    <span class="n">bundle</span> <span class="ss">:exec</span><span class="p">,</span> <span class="s2">"rails c production"</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre>
+</div>
+
+
+<h4>Example 2. Reloading Apache configuration (involves sudo):</h4>
+
+<div class="highlight">
+<pre><span class="n">task</span> <span class="ss">:reload</span> <span class="k">do</span>
+  <span class="nb">require</span> <span class="s1">'remoting/task'</span>
+
+  <span class="n">remote</span><span class="p">(</span><span class="s1">'reload'</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">login</span><span class="p">,</span> <span class="ss">:interactive</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span> <span class="k">do</span>
+    <span class="n">sudo</span> <span class="s2">"/etc/init.d/apache2 reload"</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre>
+</div>
+
+
+<h2>A note on modularity</h2>
+
+<p>A complete deployment manager (like Capistrano even if probably not as good as it is) can be easily built over <em>remoting</em>. Capistrano recipes can be ordinary rake tasks packed as gems. Plus various <em>deployment strategies</em> can be assembled as dependencies of a main <code>deploy</code> task.</p>
+
+<div class="highlight">
+<pre><span class="c1"># Gemfile</span>
+<span class="n">gem</span> <span class="s1">'remoting_scm_git'</span>          <span class="c1"># provides 'remoting:scm:push, remoting:scm:update_remoting_code'</span>
+<span class="n">gem</span> <span class="s1">'remoting_server_passenger'</span> <span class="c1"># provides 'remoting:server:restart'</span>
+
+<span class="c1"># remoting.rake</span>
+<span class="n">desc</span> <span class="s2">"Deploy application on server"</span>
+<span class="n">task</span> <span class="ss">:deploy</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="s2">"remoting:scm:push"</span><span class="p">,</span> <span class="s2">"remoting:scm:update_remoting_code"</span><span class="p">,</span> <span class="s2">"remoting:bundle"</span><span class="p">,</span> <span class="s2">"remoting:server:restart"</span><span class="o">]</span> <span class="k">do</span>
+<span class="k">end</span>
+</pre>
+</div>
+
+
+<h2>Examples</h2>
+
+<p>You can find more examples under <code>examples</code> source directory</p>
+
+<h2>Coming Soon</h2>
+
+<ul>
+<li>Ability to define bunch of commands as functions</li>
+<li>Pre-packed strategies<br>
+</li>
+</ul><hr><p>Copyright (c) 2012 mcasimir</p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+        </section>
+
+        <footer>
+          Remoting is maintained by <a href="https://github.com/mcasimir">mcasimir</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
