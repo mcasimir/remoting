@@ -5,7 +5,8 @@ namespace :remote do
     
     remote('info', config.login) do
       source "~/.profile"
-      source "$HOME/.rvm/scripts/rvm"
+      source "/usr/local/rvm/scripts/rvm"
+      
       
       which :ruby
       echo "RUBY    VERSION: `ruby --version`"
@@ -94,7 +95,8 @@ namespace :remote do
 
     remote('bundle', config.login) do
       source "~/.profile"
-      source "$HOME/.rvm/scripts/rvm"
+      source "/usr/local/rvm/scripts/rvm"
+      
       rvm :use, config.ruby
 
       cd  config.dest

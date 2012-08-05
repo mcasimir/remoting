@@ -116,20 +116,18 @@ task :reload do
 end
 ```
 
-## A note on modularity
+## Recipes
 
 A complete deployment manager (like Capistrano even if probably not as good as it is) can be easily built over *remoting*. Capistrano recipes can be ordinary rake tasks packed as gems. Plus various _deployment strategies_ can be assembled as dependencies of a main `deploy` task.
 
-``` rb
-# Gemfile
-gem 'remoting_scm_git'          # provides 'remoting:scm:push, remoting:scm:update_remoting_code'
-gem 'remoting_server_passenger' # provides 'remoting:server:restart'
+As from version `0.3.0` **Remoting** added support for recipes with a generator (`rails g remoting:recipe`) that basically installs recipes from [remoting/recipes](https://github.com/mcasimir/remoting/tree/master/recipes) into `lib/tasks/remote`.
 
-# remoting.rake
-desc "Deploy application on server"
-task :deploy => ["remoting:scm:push", "remoting:scm:update_remoting_code", "remoting:bundle", "remoting:server:restart"] do
-end
+eg.
+
 ```
+rails g remoting:recipe rails git bare apache slow_assets_workaround
+```
+
 
 ## Examples
 
