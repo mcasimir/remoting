@@ -120,7 +120,7 @@ end
 
 A complete deployment manager (like Capistrano even if probably not as good as it is) can be easily built over *remoting*. Capistrano recipes can be ordinary rake tasks packed as gems. Plus various _deployment strategies_ can be assembled as dependencies of a main `deploy` task.
 
-As from version `0.3.0` **Remoting** added support for recipes with a generator (`rails g remoting:recipe`) that basically installs recipes from [remoting/recipes](https://github.com/mcasimir/remoting/tree/master/recipes) into `lib/tasks/remote`.
+As from version `0.3.1` **Remoting** added support for recipes with a generator (`rails g remoting:recipe`) that basically installs recipes from [remoting/recipes](https://github.com/mcasimir/remoting/tree/master/recipes) into `lib/tasks/remote`.
 
 eg.
 
