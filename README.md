@@ -25,7 +25,7 @@ remote:
   repo: git@gitserver:myapp.git
   ruby: 1.9.3
   gemset: myapp
-```       
+```
 
 ## Usage
 
