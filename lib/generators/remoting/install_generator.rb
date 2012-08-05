@@ -1,13 +1,14 @@
 module Remoting
   module Generators
     class InstallGenerator < Rails::Generators::Base
-      class_option :host, :alias => "h", :default => "host"
-      class_option :user, :alias => "u", :default => "ror"
+      class_option :host, :default => "remote"
+      class_option :user, :default => "ror"
       
       def create_remote_yml
         appname = Rails.application.class.to_s.split("::").first.underscore
-        user = options[:host]
-        host = options[:host] 
+        host = options[:host]
+        user = options[:user] 
+        
         stub = <<-STUB
 remote:
   login: #{user}@#{host}
