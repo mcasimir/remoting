@@ -25,7 +25,7 @@ remote:
       
       def create_remote_rake
         
-        create_file "lib/tasks/remote.rake", <<-eos
+        create_file "lib/tasks/remote/remote.rake", <<-eos
 namespace :remote do
   desc "Deploy application on server"
   task :deploy => [:push, :bundle, :"assets:compile", :restart] do
