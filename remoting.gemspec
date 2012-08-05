@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = "remoting"
-  s.version = "0.2.15"
+  s.version = "0.2.16"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["mcasimir"]
@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
     "examples/remote.rake",
     "examples/remote.yml",
     "lib/generators/remoting/install_generator.rb",
+    "lib/generators/remoting/recipe.rb",
     "lib/remoting.rb",
     "lib/remoting/commander.rb",
     "lib/remoting/config.rb",
@@ -37,6 +38,14 @@ Gem::Specification.new do |s|
     "lib/remoting/shell.rb",
     "lib/remoting/ssh.rb",
     "lib/remoting/task.rb",
+    "recipes/apache.rake",
+    "recipes/bare.rake",
+    "recipes/git.rake",
+    "recipes/precompile_assets_on_deploy.rake",
+    "recipes/rails.rake",
+    "recipes/slow_assets_workaround.rake",
+    "recipes/utils.rake",
+    "recipes/whenever.rake",
     "remoting.gemspec"
   ]
   s.homepage = "http://github.com/mcasimir/remoting"
