@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = "remoting"
-  s.version = "0.3.2"
+  s.version = "0.3.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["mcasimir"]
@@ -26,7 +26,6 @@ Gem::Specification.new do |s|
     "examples/remote.rake",
     "examples/remote.yml",
     "lib/generators/remoting/install_generator.rb",
-    "lib/generators/remoting/recipe.rb",
     "lib/remoting.rb",
     "lib/remoting/commander.rb",
     "lib/remoting/config.rb",

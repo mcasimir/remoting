@@ -1,5 +1,5 @@
 module Remoting
-  class Recipe < Rails::Generators::Base
+  class RecipeGenerator < Rails::Generators::Base
     source_root File.expand_path('../../../../recipes', __FILE__)
     
     argument :names, :as => :array, :required => true, :banner => "RECIPE1 RECIPE2 ..."
