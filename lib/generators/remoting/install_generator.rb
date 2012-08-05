@@ -1,15 +1,21 @@
 module Remoting
   module Generators
     class InstallGenerator < Rails::Generators::Base
+      class_option :host, :alias => "h", :default => "host"
+      class_option :user, :alias => "u", :default => "ror"
+      
       def create_remote_yml
-        
+        appname = Rails.application.class.to_s.split("::").first.underscore
+        user = options[:host]
+        host = options[:host] 
         stub = <<-STUB
 remote:
-  login: user@server
-  dest: /var/ror/myapp
-  repo: git@gitserver:myapp
+  login: #{user}@#{host}
+  dest: /var/#{user}/#{appname}
+  repo: ssh://#{user}@#{host}/var/ror/git/#{appname}.git
   ruby: 1.9.3
-  gemset: myapp        
+  tmp: /tmp
+  app: #{appname}
         STUB
         
         create_file "config/remote.yml", stub
