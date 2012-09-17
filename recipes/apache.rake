@@ -10,6 +10,20 @@ namespace :remote do
     
   end
 
+  desc "First deploy"
+  task :first_deploy => [
+    :"remote:bare:setup", 
+    :"remote:init", 
+    :"remote:deploy", 
+    :"remote:apache:ensite", 
+    :"remote:apache:reload", 
+    :"remote:db:create", 
+    :"remote:db:migrate", 
+    :"remote:db:seed",
+    :"remote:assets:precompile",
+    :"remote:restart"
+  ]
+
   namespace :apache do
     task :ensite do
       require 'remoting/task'
