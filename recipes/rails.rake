@@ -76,6 +76,18 @@ namespace :remote do
   end
   
   namespace :db do
+      desc "Create remote database"
+      task :create do |t, args|
+        require 'remoting/task'
+    
+        remote('rake db:create', config.login) do
+          source "/usr/local/rvm/scripts/rvm"
+          rvm :use, config.ruby
+          cd  config.dest
+          command("RAILS_ENV=production bundle exec rake db:create")
+        end
+      end
+      
       desc "Migrate remote database"
       task :migrate do |t, args|
         require 'remoting/task'
